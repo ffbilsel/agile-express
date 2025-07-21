@@ -1,0 +1,19 @@
+Swagger, Unit Tests and Logging
+Gmail smtp for notification emails
+	Scheduled at 9 AM
+Global Exception Handler and Custom Exceptions
+PreAuthorize on Controllers
+Oauth2 Login Flow
+	Ldap user creation with team member role on first login 
+SpringDataJPA as ORM
+Custom JPQL Queries
+Set Role Flow
+	Removes linked issues and kicks out from all projects also wants user to re-login
+Why MySQL & SpringDataJPA
+
+Why Next.js & Typescript & ESlint
+Why ReactQuery
+Error and Confirmation Contexts
+Front-end Demo
+
+Dockercompose and Dockerfiles for Deployment

@@ -1,0 +1,71 @@
+dn: dc=obss,dc=com
+objectClass: top
+objectClass: domain
+dc: obss
+
+dn: ou=users,dc=obss,dc=com
+objectClass: organizationalUnit
+ou: users
+
+dn: ou=groups,dc=obss,dc=com
+objectClass: organizationalUnit
+ou: groups
+
+# Users
+
+dn: cn=admin,ou=users,dc=obss,dc=com
+objectClass: inetOrgPerson
+cn: admin
+sn: admin
+userPassword: 123
+
+dn: cn=pm,ou=users,dc=obss,dc=com
+objectClass: inetOrgPerson
+cn: pm
+sn: pm
+userPassword: 123
+
+dn: cn=lead,ou=users,dc=obss,dc=com
+objectClass: inetOrgPerson
+cn: lead
+sn: lead
+userPassword: 123
+
+dn: cn=member,ou=users,dc=obss,dc=com
+objectClass: inetOrgPerson
+cn: member
+sn: member
+userPassword: 123
+
+# Dummy User
+dn: cn=dummy,ou=users,dc=obss,dc=com
+objectClass: inetOrgPerson
+cn: dummy
+sn: dummy
+userPassword: 7f4b41d5-8b9c-4e5c-bf62-f53e6fcd0a8f
+
+# Groups (Roles)
+
+dn: cn=admin,ou=groups,dc=obss,dc=com
+objectClass: groupOfNames
+cn: admin
+member: cn=admin,ou=users,dc=obss,dc=com
+member: cn=dummy,ou=users,dc=obss,dc=com
+
+dn: cn=project_manager,ou=groups,dc=obss,dc=com
+objectClass: groupOfNames
+cn: project_manager
+member: cn=pm,ou=users,dc=obss,dc=com
+member: cn=dummy,ou=users,dc=obss,dc=com
+
+dn: cn=team_lead,ou=groups,dc=obss,dc=com
+objectClass: groupOfNames
+cn: team_lead
+member: cn=lead,ou=users,dc=obss,dc=com
+member: cn=dummy,ou=users,dc=obss,dc=com
+
+dn: cn=team_member,ou=groups,dc=obss,dc=com
+objectClass: groupOfNames
+cn: team_member
+member: cn=member,ou=users,dc=obss,dc=com
+member: cn=dummy,ou=users,dc=obss,dc=com

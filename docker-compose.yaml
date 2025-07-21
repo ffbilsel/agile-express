@@ -1,0 +1,101 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: mydatabase
+      MYSQL_USER: ${MYSQL_USERNAME}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  openldap:
+    image: osixia/openldap:latest
+    container_name: openldap-server
+    restart: always
+    environment:
+      LDAP_ORGANISATION: "OBSS"
+      LDAP_DOMAIN: "obss.com"
+      LDAP_BASE_DN: "dc=obss,dc=com"
+      LDAP_ADMIN_PASSWORD: ${LDAP_PASSWORD}
+    ports:
+      - "389:389"
+      - "636:636"
+    volumes:
+      - openldap-data:/var/lib/ldap
+      - openldap-config:/etc/ldap/slapd.d
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.15.0
+    container_name: elasticsearch
+    restart: always
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - ES_JAVA_OPTS=-Xms1g -Xmx1g
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    volumes:
+      - es-data:/usr/share/elasticsearch/data
+
+  backend:
+    build:
+      context: ./be
+      dockerfile: Dockerfile
+    container_name: springboot-be
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db:3306/mydatabase
+      SPRING_DATASOURCE_USERNAME: ${MYSQL_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD}
+      SPRING_MAIL_USERNAME: ${NOTIFICATION_EMAIL}
+      SPRING_MAIL_PASSWORD: ${NOTIFICATION_EMAIL_APP_PASSWORD}
+      SPRING_LDAP_URLS: ldap://openldap-server:389
+      SPRING_LDAP_BASE: dc=obss,dc=com
+      SPRING_LDAP_USERNAME: cn=${LDAP_USERNAME},dc=obss,dc=com
+      SPRING_LDAP_PASSWORD: ${LDAP_PASSWORD}
+      SPRING_ELASTICSEARCH_URIS: http://elasticsearch:9200
+      SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+    depends_on:
+      - mysql
+      - openldap
+      - elasticsearch
+
+  frontend:
+    build:
+      context: ./fe
+      dockerfile: Dockerfile
+    container_name: nextjs-fe
+    restart: always
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
+  jenkins:
+    build: ./jenkins # directory with Dockerfile
+    container_name: jenkins
+    restart: always
+    user: root
+    ports:
+      - "8081:8080"
+      - "50000:50000"
+    volumes:
+      - jenkins-data:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./ldap_data.ldif:/var/jenkins_home/ldap_data.ldif # mount the file
+
+volumes:
+  mysql-data:
+  openldap-data:
+  openldap-config:
+  es-data:
+  jenkins-data:

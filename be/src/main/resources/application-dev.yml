@@ -1,0 +1,70 @@
+app:
+  sync-ldap-users: true
+  jwt:
+    secret: 8d6e9f14a7c64d46bba260b3c3f784d1b6cf13f9398d4d1fb5426ab0079a239f
+    expiration: 86400000 # 24 hours in milliseconds
+    refresh:
+      expiration: 604800000 # 7 days
+
+spring:
+
+  elasticsearch:
+    uris: http://localhost:9200
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${NOTIFICATION_EMAIL}
+    password: ${NOTIFICATION_EMAIL_APP_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/mydatabase?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    username: ${MYSQL_USERNAME}
+    password: ${MYSQL_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update # or validate, create-drop, etc.
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+  application:
+    name: be
+
+  ldap:
+    urls: ldap://localhost:389
+    base: dc=obss,dc=com
+    username: cn=${LDAP_USERNAME},dc=obss,dc=com
+    password: ${LDAP_PASSWORD}
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
+            scope:
+              - openid
+              - profile
+              - email
+        provider:
+          google:
+            authorization-uri: https://accounts.google.com/o/oauth2/v2/auth
+            token-uri: https://oauth2.googleapis.com/token
+            user-info-uri: https://openidconnect.googleapis.com/v1/userinfo
+            user-name-attribute: sub
+
+logging:
+  level:
+    org.hibernate: warn
+    org.hibernate.SQL: off
+    org.hibernate.type.descriptor.sql.BasicBinder: off
