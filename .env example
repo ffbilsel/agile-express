@@ -1,0 +1,15 @@
+# MySQL Configuration
+MYSQL_USERNAME=root
+MYSQL_PASSWORD=rootpassword
+
+# LDAP Configuration
+LDAP_USERNAME=admin
+LDAP_PASSWORD=adminpassword
+
+# Google OAuth2 Credentials
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+
+# Email Notification Settings
+NOTIFICATION_EMAIL=
+NOTIFICATION_EMAIL_APP_PASSWORD=

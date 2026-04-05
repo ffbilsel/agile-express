@@ -29,6 +29,19 @@ services:
       - openldap-data:/var/lib/ldap
       - openldap-config:/etc/ldap/slapd.d
 
+  ldap-init:
+    image: osixia/openldap:latest
+    container_name: ldap-initializer
+    volumes:
+      - ./ldap.sh:/app/ldap.sh
+      - ./ldap_data.ldif:/app/ldap_data.ldif
+    working_dir: /app
+    environment:
+      - LDAP_PASSWORD=${LDAP_PASSWORD}
+    entrypoint: ["/bin/bash", "./ldap.sh"]
+    depends_on:
+      - openldap
+
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.15.0
     container_name: elasticsearch
@@ -80,22 +93,8 @@ services:
     depends_on:
       - backend
 
-  jenkins:
-    build: ./jenkins # directory with Dockerfile
-    container_name: jenkins
-    restart: always
-    user: root
-    ports:
-      - "8081:8080"
-      - "50000:50000"
-    volumes:
-      - jenkins-data:/var/jenkins_home
-      - /var/run/docker.sock:/var/run/docker.sock
-      - ./ldap_data.ldif:/var/jenkins_home/ldap_data.ldif # mount the file
-
 volumes:
   mysql-data:
   openldap-data:
   openldap-config:
   es-data:
-  jenkins-data:
