@@ -331,6 +331,19 @@ This project was the sole deliverable of the **OBSS 2025 Java Summer Internship*
 
 All required features were implemented. Both listed extra features — burndown chart and scheduled email notifications — were delivered. The final presentation included a formal defense of every architectural and technology decision to a jury panel.
 
+![Alt Text](assets/1.png)
+![Alt Text](assets/2.png)
+![Alt Text](assets/3.png)
+![Alt Text](assets/4.png)
+![Alt Text](assets/5.png)
+![Alt Text](assets/6.png)
+![Alt Text](assets/7.png)
+![Alt Text](assets/8.png)
+![Alt Text](assets/9.png)
+![Alt Text](assets/10.png)
+![Alt Text](assets/11.png)
+![Alt Text](assets/12.png)
+
 ---
 
 *Built by **Fatih Furkan Bilsel** — [fatihfurkanbilsel@gmail.com](mailto:fatihfurkanbilsel@gmail.com)*
